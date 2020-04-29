@@ -1,0 +1,47 @@
+version: '3'
+services:
+  web-apache:
+    build: ./apache
+    image: web-apache-image
+    container_name: web-apache
+    ports:
+      - '8080:80'
+    volumes:
+      - ./webroot:/var/www/html
+    networks:
+      - cont-link
+
+  web-phpfpm:
+    build: ./php-fpm
+    image: wab-phpfpm-image
+    container_name: web-phpfpm
+    volumes:
+      - ./webroot:/var/www/html
+    networks:
+      - cont-link
+
+  web-mysql:
+    build: ./mysql
+    image: web-mysql-image
+    container_name: web-phpfpm
+    container_name: web-mysql
+    volumes:
+      - ./mysql/initialize:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - cont-link
+
+networks:
+  cont-link:
+
+
+#docker-compose up --build -d
+#docker ps -aq | xargs docker rm -f 
+#docker images -aq | xargs docker rmi -f 
+
+#apt-get install iputils-ping net-tools
+
+#docker exec -it web-xxx /bin/bash
+#docker run -d --name hoge:hoge mysql 
+#docker buld -t imgage_name:tag .
+
