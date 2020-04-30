@@ -1,0 +1,40 @@
+version: '3'
+services:
+  web-apache:
+    build: ./apache
+    image: web-apache-image
+    container_name: web-apache
+    ports:
+      - '8080:80'
+    volumes:
+      - ./webroot/application:/var/www/html/application
+      - ./webroot/packages:/var/www/html/packages
+    networks:
+      - cont-link
+
+  web-phpfpm:
+    build: ./php-fpm
+    image: wab-phpfpm-image
+    container_name: web-phpfpm
+    volumes:
+      - ./webroot/application:/var/www/html/application
+      - ./webroot/packages:/var/www/html/packages
+    networks:
+      - cont-link
+
+  web-mysql:
+    build: ./mysql
+    image: web-mysql-image
+    container_name: web-mysql
+    volumes:
+      - ./mysql/initialize:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - cont-link
+
+networks:
+  cont-link:
+
+
+#docker-compose up --build -d
+
